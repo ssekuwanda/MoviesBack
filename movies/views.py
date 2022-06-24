@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 
 class MoviesListAPIView(ListCreateAPIView):
     serializer_class = MovieSerializer
-    queryset = Movie.objects.all()
+    queryset = Movie.objects.order_by('?')
     # permission_classes = (permissions.IsOwner,IsAuthenticated)
 
 class MovieDetailAPIView(RetrieveUpdateDestroyAPIView):
