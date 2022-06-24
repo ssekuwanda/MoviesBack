@@ -12,7 +12,7 @@ class Movie(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     genre = models.ManyToManyField(Genre, related_name="moviegenre", blank=True, null=True)
-    slug = models.CharField(max_length=200, null=False)
+    slug = models.CharField(max_length=200, null=True)
     image = models.ImageField(upload_to="Cover Images", null=True)
     file = models.FileField(upload_to="Video", null=True)
     created = models.DateField(null=False, blank=False, auto_now_add=True)
@@ -23,3 +23,12 @@ class Movie(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify('{} {}'.format(self.title, str(uuid4())))
         super(Movie, self).save(*args, **kwargs)
+
+# class Downloaded(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     movie = models.ManyToManyField(Movie, related_name='my_movies', blank=True)
+#     timestamp = models.DateTimeField(auto_now_add=True)
+#     updated = models.DateTimeField(auto_now=True)
+
+#     def __str__(self):
+#         return self.user.username
