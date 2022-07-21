@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework',
     'knox',
+    'qr_code',
 
     'movies',
     'series',

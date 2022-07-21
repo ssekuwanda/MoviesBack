@@ -33,3 +33,20 @@ class Downloaded(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class QrCodePayment(models.Model):
+    code = models.CharField(max_length=120, blank=False, null=False)
+    user = models.ForeignKey(User, related_name='payer', on_delete=models.CASCADE)
+    creator = models.ForeignKey(User, related_name='issuer', on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    used = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.code
+
+    def save(self):
+        pass
+
+    
