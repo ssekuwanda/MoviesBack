@@ -19,4 +19,3 @@ class SeasonAdmin(admin.ModelAdmin):
 
 admin.site.register(Serie,SerieAdmin)
 admin.site.register(Season, SeasonAdmin)
-

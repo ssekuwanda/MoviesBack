@@ -2,6 +2,10 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 from uuid import uuid4
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+import random
+import string
 
 class Genre(models.Model):
     name = models.CharField(max_length=100)
@@ -34,19 +38,37 @@ class Downloaded(models.Model):
     def __str__(self):
         return self.user.username
 
+    class Meta:
+        ordering = ['user']
+
 
 class QrCodePayment(models.Model):
-    code = models.CharField(max_length=120, blank=False, null=False)
-    user = models.ForeignKey(User, related_name='payer', on_delete=models.CASCADE)
-    creator = models.ForeignKey(User, related_name='issuer', on_delete=models.CASCADE)
+    code = models.CharField(max_length=10000, blank=True, null=False)
+    user = models.ForeignKey(User, related_name='payer', blank=True, null=True, on_delete=models.SET_NULL)
+    creator = models.ForeignKey(User, related_name='issuer',blank=True, null=True, on_delete=models.SET_NULL)
+    amount = models.IntegerField()
+    password = models.CharField(max_length=100, blank=False, null=False)
     timestamp = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     used = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.code
+        return str(self.amount)
 
-    def save(self):
-        pass
+    def save(self, *args, **kwargs):
+        klass = self.__class__
+        if self.code:
+            new_code = self.code
+        else:
+            new_code = ''.join(random.choice(string.ascii_uppercase+string.digits) for _ in range(1000))
+            if klass.objects.filter(code=new_code).exists():
+                new_code = ''.join(random.choice(string.ascii_uppercase+string.digits) for _ in range(1000))
+            self.code = new_code
+        super(QrCodePayment, self).save(*args, **kwargs)
 
-    
+class SaleSummary(QrCodePayment):
+    class Meta:
+        proxy = True
+        verbose_name = 'Sale Summary'
+        verbose_name_plural = 'Sales Summary'
+

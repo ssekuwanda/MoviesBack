@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% load qr_code %}
+
+<div class="container m-3">
+    <div class="row mt-3">
+        <div class="row">
+            <div class="col-12">
+                <div class="">Amount: {{code.amount|intcomma}}</div>
+            </div>
+            <div class="col-12">
+                {% qr_from_text engage.qr_code_info size=6 image_format="png" error_correction="L" border=3 %}
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}
