@@ -1,10 +1,15 @@
 from rest_framework import serializers
-from .models import Movie, Downloaded, QrCodePayment
+from .models import *
 
 class MovieSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ('id', 'title', 'description','image','file', )
         model = Movie
+
+class UpcomingSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = ('id', 'title','image',)
+        model = Upcoming
 
 class DownloadedSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,4 +19,4 @@ class DownloadedSerializer(serializers.ModelSerializer):
 class QrCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = QrCodePayment
-        fields = ('id','code','user','')
+        fields = ('id','code','user','amount','timestamp','used')
