@@ -30,8 +30,8 @@ class Movie(models.Model):
         super(Movie, self).save(*args, **kwargs)
 
 class Upcoming(models.Model):
-    title = models.CharField(max_length=200)
-    image = models.ImageField(upload_to="Cover Images", null=True)
+    title = models.CharField(max_length=200, null=False, blank=False)
+    image = models.ImageField(upload_to="Cover Images", null=False, blank=False)
     created = models.DateField(null=False, blank=False, auto_now_add=True)
 
     def __str__(self):
